@@ -23,10 +23,7 @@ class Compass {
   Compass._internal() {
     if (device == null)
       throw new StateError('device is not ready yet.');
-    js.scoped(() {
-      _compass = js.context.navigator.compass;
-      js.retain(_compass);
-    });
+    _compass = js.context.navigator.compass;
   }
 
   /**
@@ -36,14 +33,12 @@ class Compass {
    * code is returned via the [error] callback.
    */
   void getCurrentHeading(CompassSuccessCB success, CompassErrorCB error) {
-    js.scoped(() {
-      var s0 = (p) => success(new CompassHeading.fromProxy(p));
-      var e0 = (p) => error(new CompassError.fromProxy(p));
-      List jsfns = JSUtil.newCallbackOnceGroup("cmp", [s0, e0], [1, 1]);
-      var ok = jsfns[0];
-      var fail = jsfns[1];
-      js.context.navigator.compass.getCurrentHeading(ok, fail);
-    });
+    var s0 = (p) => success(new CompassHeading.fromProxy(p));
+    var e0 = (p) => error(new CompassError.fromProxy(p));
+    List jsfns = JSUtil.newCallbackOnceGroup("cmp", [s0, e0], [1, 1]);
+    var ok = jsfns[0];
+    var fail = jsfns[1];
+    js.context.navigator.compass.getCurrentHeading(ok, fail);
   }
 
   /**
@@ -57,16 +52,14 @@ class Compass {
    */
   watchHeading(CompassSuccessCB success,
                CompassErrorCB error, [CompassOptions options]) {
-    return js.scoped(() {
-      var s0 = (p) => success(new CompassHeading.fromProxy(p));
-      var e0 = (p) => error(new CompassError.fromProxy(p));
-      var ok = new js.Callback.many(s0);
-      var fail = new js.Callback.many(e0);
-      var opts = options == null ? null : js.map(options._toMap());
-      var id = "cmp_${js.context.navigator.compass.watchHeading(ok, fail, opts)}";
-      JSUtil.addCallbacks(id, [ok, fail]);
-      return id;
-    });
+    var s0 = (p) => success(new CompassHeading.fromProxy(p));
+    var e0 = (p) => error(new CompassError.fromProxy(p));
+    var ok = s0;
+    var fail = e0;
+    var opts = options == null ? null : js.map(options._toMap());
+    var id = "cmp_${js.context.navigator.compass.watchHeading(ok, fail, opts)}";
+    JSUtil.addCallbacks(id, [ok, fail]);
+    return id;
   }
 
   /**
@@ -76,9 +69,7 @@ class Compass {
    * + [watchID] - the watch ID got from [watchCompassHeading] method.
    */
   void clearWatch(var watchID) {
-    js.scoped(() {
-      js.context.navigator.compass.clearWatch(watchID.substring(4));
-      JSUtil.delCallbacks(watchID);
-    });
+    js.context.navigator.compass.clearWatch(watchID.substring(4));
+    JSUtil.delCallbacks(watchID);
   }
 }

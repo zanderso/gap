@@ -26,13 +26,10 @@ class Connection {
   Connection._internal() {
     if (device == null)
       throw new StateError('device is not ready yet.');
-    js.scoped(() {
-      _connection = js.context.navigator.network.connection;
-      js.retain(_connection);
-    });
+    _connection = js.context.navigator.network.connection;
   }
 
   /** connection type */
-  String get type => js.scoped(() => _connection.type);
+  String get type => _connection.type;
 }
 

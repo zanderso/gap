@@ -23,10 +23,7 @@ class Geolocation {
   Geolocation._internal() {
     if (device == null)
       throw new StateError('device is not ready yet.');
-    js.scoped(() {
-      _geolocation = js.context.navigator.geolocation;
-      js.retain(_geolocation);
-    });
+    _geolocation = js.context.navigator.geolocation;
   }
 
   /**
@@ -35,14 +32,12 @@ class Geolocation {
    */
   void getCurrentPosition(GeolocationSuccessCB success,
                     [GeolocationErrorCB error, GeolocationOptions options]) {
-    js.scoped(() {
-      var s0 = (p) => success(new Position.fromProxy(p));
-      var e0 = (p) => error(new PositionError.fromProxy(p));
-      List jsfns = JSUtil.newCallbackOnceGroup("geo", [s0, e0], [1, 1]);
-      var ok = jsfns[0];
-      var fail = jsfns[1];
-      _geolocation.getCurrentPosition(ok, fail);
-    });
+    var s0 = (p) => success(new Position.fromProxy(p));
+    var e0 = (p) => error(new PositionError.fromProxy(p));
+    List jsfns = JSUtil.newCallbackOnceGroup("geo", [s0, e0], [1, 1]);
+    var ok = jsfns[0];
+    var fail = jsfns[1];
+    _geolocation.getCurrentPosition(ok, fail);
   }
 
   /**
@@ -54,19 +49,17 @@ class Geolocation {
    * + [error] - error callback function.
    * + [options] - optional parameter.
    */
-  watchPosition(GeolocationSuccessCB success,
-                    [GeolocationErrorCB error, GeolocationOptions options]) {
-    return js.scoped(() {
-      var s0 = (p) => success(new Position.fromProxy(p));
-      var e0 = error == null ?
-          null : (p) => error(new PositionError.fromProxy(p));
-      var ok = new js.Callback.many(s0);
-      var fail = e0 == null ? null : new js.Callback.many(e0);
-      var opts = options == null ? null : js.map(options._toMap());
-      var id = "geo_${geolocation.watchPosition(ok, fail, opts)}";
-      JSUtil.addCallbacks(id, [ok, fail]);
-      return id;
-    });
+  watchPosition(GeolocationSuccessCB success, GeolocationErrorCB error,
+                [GeolocationOptions options]) {
+    var s0 = (p) => success(new Position.fromProxy(p));
+    var e0 = error == null ?
+        null : (p) => error(new PositionError.fromProxy(p));
+    var ok = s0;
+    var fail = e0;
+    var opts = options == null ? null : js.map(options._toMap());
+    var id = "geo_${_geolocation.watchPosition(ok, fail, opts)}";
+    JSUtil.addCallbacks(id, [ok, fail]);
+    return id;
   }
 
   /**
@@ -76,9 +69,7 @@ class Geolocation {
    * + [watchID] - the watch ID got from [watchPosition] method.
    */
   void clearWatch(var watchID) {
-    js.scoped(() {
-      _geolocation.clearWatch(watchID.substring(4));
-      JSUtil.delCallbacks(watchID);
-    });
+    _geolocation.clearWatch(watchID.substring(4));
+    JSUtil.delCallbacks(watchID);
   }
 }

@@ -22,10 +22,7 @@ class Camera {
   Camera._internal() {
     if (device == null)
       throw new StateError('device is not ready yet.');
-    js.scoped(() {
-      _camera = js.context.navigator.camera;
-      js.retain(_camera);
-    });
+    _camera = js.context.navigator.camera;
   }
 
   /**
@@ -35,13 +32,11 @@ class Camera {
   */
   void getPicture(CameraSuccessCB success,
       CameraErrorCB error, [CameraOptions options]) {
-    js.scoped(() {
-      var jsfns = JSUtil.newCallbackOnceGroup("cam", [success, error], [1, 1]);
-      var ok = jsfns[0];
-      var fail = jsfns[1];
-      var opts = options == null ? null : js.map(options._toMap());
-      _camera.getPicture(ok, fail, opts);
-    });
+    var jsfns = JSUtil.newCallbackOnceGroup("cam", [success, error], [1, 1]);
+    var ok = jsfns[0];
+    var fail = jsfns[1];
+    var opts = options == null ? null : js.map(options._toMap());
+    _camera.getPicture(ok, fail, opts);
   }
 
   /**
@@ -51,11 +46,9 @@ class Camera {
    * to [DestinationType.FILE_URI].
    */
   void cleanup(CleanupSuccessCB success, CameraErrorCB error) {
-    js.scoped(() {
-      var jsfns = JSUtil.newCallbackOnceGroup("cam", [success, error], [0, 1]);
-      var ok = jsfns[0];
-      var fail = jsfns[1];
-      _camera.cleanup(ok, fail);
-    });
+    var jsfns = JSUtil.newCallbackOnceGroup("cam", [success, error], [0, 1]);
+    var ok = jsfns[0];
+    var fail = jsfns[1];
+    _camera.cleanup(ok, fail);
   }
 }

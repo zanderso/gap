@@ -21,10 +21,7 @@ class Notification {
   Notification._internal() {
     if (device == null)
       throw new StateError('device is not ready yet.');
-    js.scoped(() {
-      _notification = js.context.navigator.notification;
-      js.retain(_notification);
-    });
+    _notification = js.context.navigator.notification;
   }
 
   /** Show a custom alert/dialog box.
@@ -35,10 +32,8 @@ class Notification {
    */
   alert(String message, NotificationAlertCallback alertCallback,
       [String title = 'Alert', String buttonName = 'OK']) {
-    js.scoped(() {
-      var s = new js.Callback.once(alertCallback);
-      _notification.alert(message, s, title, buttonName);
-    });
+    var s = new js.Callback.once(alertCallback);
+    _notification.alert(message, s, title, buttonName);
   }
 
   /** Show a customizable confirmation dialog box.
@@ -49,18 +44,16 @@ class Notification {
    */
   confirm(String message, NotificationConfirmCallback confirmCallback,
           [String title = 'Confirm', String buttonLabels = 'OK,Cancel']) {
-    js.scoped(() {
-      var s = new js.Callback.once(confirmCallback);
-      _notification.confirm(message, s, title, buttonLabels);
-    });
+    var s = new js.Callback.once(confirmCallback);
+    _notification.confirm(message, s, title, buttonLabels);
   }
 
   /** Play a beep sound.
    * + [times] the number of times to beep.
    */
-  beep(int times) => js.scoped(() => _notification.beep(times));
+  beep(int times) => _notification.beep(times);
 
   /** Vibrates device the specified duration in milliseconds.
    */
-  vibrate(int milliseconds) => js.scoped(() => _notification.vibrate(milliseconds));
+  vibrate(int milliseconds) => _notification.vibrate(milliseconds);
 }

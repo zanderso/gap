@@ -17,10 +17,17 @@ class GeolocationOptions {
   /** Hint requesting best accuracy Position */
   bool enableHighAccuracy;
 
-  GeolocationOptions({this.frequency : 10000, this.enableHighAccuracy : true,
-                      this.timeout, this.maximumAge});
+  GeolocationOptions({frequency : 10000,
+                      enableHighAccuracy : true,
+                      timeout,
+                      maximumAge})
+    : this.frequency = frequency,
+      this.enableHighAccuracy = enableHighAccuracy,
+      this.timeout = timeout,
+      this.maximumAge = maximumAge;
 
-  Map _toMap()
-  => {'frequency' : frequency, 'enableHighAccuracy' : enableHighAccuracy,
-      'timeout' : timeout, 'maximumAge' : maximumAge};
+  Map _toMap() => {'frequency' : this.frequency,
+                   'enableHighAccuracy' : this.enableHighAccuracy,
+                   'timeout' : this.timeout,
+                   'maximumAge' : this.maximumAge};
 }

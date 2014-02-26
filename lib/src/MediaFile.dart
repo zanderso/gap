@@ -37,18 +37,11 @@ class MediaFile {
 
   /** Returns format information of this Media file */
   void getFormatData(MediaFileDataSuccessCB success, [MediaFileDataErrorCB error]) {
-    js.scoped(() {
-      var s0 = (p) => success(new MediaFileData.fromProxy(p));
-      List jsfns = JSUtil.newCallbackOnceGroup("cap", [s0, error], [1, 0]);
-      var ok = jsfns[0];
-      var fail = jsfns[1];
-      _proxy.getFormatData(ok, fail);
-    });
-  }
-
-  /** Release the MediaFile */
-  void release() {
-    js.scoped(() => js.release(_proxy));
+    var s0 = (p) => success(new MediaFileData.fromProxy(p));
+    List jsfns = JSUtil.newCallbackOnceGroup("cap", [s0, error], [1, 0]);
+    var ok = jsfns[0];
+    var fail = jsfns[1];
+    _proxy.getFormatData(ok, fail);
   }
 }
 

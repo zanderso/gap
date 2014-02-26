@@ -12,17 +12,14 @@ class Device {
   js.Proxy _device;
 
   Device._internal() {
-    js.scoped(() {
-      _device = js.context.device;
-      js.retain(_device);
-    });
+    _device = js.context['device'];
   }
 
-  String get name => js.scoped(() => _device.name);
-  String get cordova => js.scoped(() => _device.cordova);
-  String get platform => js.scoped(() => _device.platform);
-  String get uuid => js.scoped(() => _device.uuid);
-  String get version => js.scoped(() => _device.version);
+  String get name => _device.name;
+  String get cordova => _device.cordova;
+  String get platform => _device.platform;
+  String get uuid => _device.uuid;
+  String get version => _device.version;
 
   void _onDeviceReady() {
     //TODO
@@ -170,51 +167,42 @@ Future<Device> _doWhenDeviceReady(String serviceUri) {
 
 //Add cordova event listener
 void _addEventListener(String name, Function callback, [bool once = false]) {
-  js.scoped(() {
-    var listener = once ?
-        new js.Callback.once(callback) : new js.Callback.many(callback);
-        js.context.document.addEventListener(name, listener, false);
-
-  });
+  js.context.document.addEventListener(name, callback, once);
 }
 
 //Whether cordova.js is loaded
 bool _cordovaLoaded() {
-  return js.scoped(() {
-    var ctx = js.context;
-    if (ctx['cordova'] != null) {
-      var cordova = ctx['cordova'];
-      if(cordova['require'] != null) {
-        var channel = cordova['require']("cordova/channel");
-        //registered but event not fired yet
-        if (channel.onDOMContentLoaded['fired'] == false) //Cordova 2.1 and before
-          channel.onDOMContentLoaded.fire();
-        else if (channel.onDOMContentLoaded['state'] == 1) //Cordova 2.2
-          channel.onDOMContentLoaded.fire();
-      }
+  var ctx = js.context;
+  if (ctx['cordova'] != null) {
+    var cordova = ctx['cordova'];
+    if(cordova['require'] != null) {
+      var channel = cordova['require']("cordova/channel");
+      //registered but event not fired yet
+      if (channel.onDOMContentLoaded['fired'] == false) //Cordova 2.1 and before
+        channel.onDOMContentLoaded.fire();
+      else if (channel.onDOMContentLoaded['state'] == 1) //Cordova 2.2
+        channel.onDOMContentLoaded.fire();
     }
-    return ctx['cordova'] != null;
-  });
+  }
+  return ctx['cordova'] != null;
 }
 
 //Whether cordova device is ready
 bool _deviceReady() {
-  return js.scoped(() {
-    var ctx = js.context;
-    if (ctx['cordova'] != null) {
-      var cordova = ctx['cordova'];
-      if(cordova['require'] != null) {
-        var channel = cordova['require']("cordova/channel");
-        var features = channel.deviceReadyChannelsArray;
-        var len = features.length;
-        for (int j = 0; j < len; ++j) {
-          var f = features[j];
-          if (f['fired'] == false) return false;
-        }
+  var ctx = js.context;
+  if (ctx['cordova'] != null) {
+    var cordova = ctx['cordova'];
+    if(cordova['require'] != null) {
+      var channel = cordova['require']("cordova/channel");
+      var features = channel.deviceReadyChannelsArray;
+      var len = features.length;
+      for (int j = 0; j < len; ++j) {
+        var f = features[j];
+        if (f['fired'] == false) return false;
       }
     }
-    return true;
-  });
+  }
+  return true;
 }
 
 //Inject JavaScript
