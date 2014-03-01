@@ -13,11 +13,11 @@ class AngularSpeed {
     
   Quaternion _quaternion(int old_ts) {
     if (old_ts != 0) {
-      double dT = (this.timestamp.toDouble() - ts.toDouble()) * NS2S;
+      double dT = (this.timestamp.toDouble() - old_ts.toDouble()) * NS2S;
 
       double w_mag = sqrt(w.x*w.x + w.y*w.y + w.z*w.z);
       Vector3 w_norm = this.w / w_mag;
-      if (w_norm < 0.0001) {
+      if (w_norm < 0.001) {
         return null;
       }
 
