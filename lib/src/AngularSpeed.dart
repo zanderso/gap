@@ -7,10 +7,9 @@ class AngularSpeed {
   final int timestamp;
   static final double NS2S = 1.0 / 1000000000.0;
 
-  AngularSpeed.fromProxy(js.Proxy p) {
-    this.w = new Vector3(p.x, p.y, p.z);
-    this.timestamp = p.timestamp;
-  }
+  AngularSpeed.fromProxy(js.Proxy p)
+    : this.w = new Vector3(p.x, p.y, p.z),
+      this.timestamp = p.timestamp;
     
   Quaternion _quaternion(int old_ts) {
     if (old_ts != 0) {
