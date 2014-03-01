@@ -9,3 +9,4 @@ dependencies:
   js: any
   rikulo_commons: any
   rikulo_ui: any
+  vector_math: any
