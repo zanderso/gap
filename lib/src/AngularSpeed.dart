@@ -17,7 +17,7 @@ class AngularSpeed {
 
       double w_mag = sqrt(w.x*w.x + w.y*w.y + w.z*w.z);
       Vector3 w_norm = this.w / w_mag;
-      if (w_norm < 0.001) {
+      if (w_mag < 0.001) {
         return null;
       }
 
