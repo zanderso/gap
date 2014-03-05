@@ -5,7 +5,7 @@ part of rikulo_gyroscope;
 class AngularSpeed {
   final Vector3 w;
   final int timestamp;
-  static final double NS2S = 1.0 / 1000000000.0;
+  static final double MS2S = 1.0 / 1000.0;
 
   AngularSpeed.fromProxy(js.Proxy p)
     : this.w = new Vector3(p.x, p.y, p.z),
@@ -13,7 +13,7 @@ class AngularSpeed {
     
   Quaternion _quaternion(int old_ts) {
     if (old_ts != 0) {
-      double dT = (this.timestamp.toDouble() - old_ts.toDouble()) * NS2S;
+      double dT = (this.timestamp.toDouble() - old_ts.toDouble()) * MS2S;
 
       double w_mag = sqrt(w.x*w.x + w.y*w.y + w.z*w.z);
       Vector3 w_norm = this.w / w_mag;
